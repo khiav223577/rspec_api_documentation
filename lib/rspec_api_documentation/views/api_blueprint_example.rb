@@ -72,7 +72,12 @@ module RspecApiDocumentation
 
       def indent(string)
         string.tap do |str|
-          str.gsub!(/\n/, "\n" + (" " * TOTAL_SPACES_INDENTATION)) if str
+          begin
+            str.gsub!(/\n/, "\n" + (" " * TOTAL_SPACES_INDENTATION)) if str
+          rescue ArgumentError => e
+            return '[binary data]' if e.message == 'invalid byte sequence in UTF-8'
+            raise e
+          end
         end
       end
 
